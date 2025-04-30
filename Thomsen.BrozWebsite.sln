@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thomsen.BrozWebsite", "src\Thomsen.BrozWebsite\Thomsen.BrozWebsite.csproj", "{FB3B5B22-EFC0-4AD3-A124-AAA328EA0B0F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		build\bump_assembly_versions.py = build\bump_assembly_versions.py
+		build\cleanup.py = build\cleanup.py
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thomsen.BrozWebsite.Repository", "src\Thomsen.BrozWebsite.Repository\Thomsen.BrozWebsite.Repository.csproj", "{786EB6EE-DD31-4A4E-9CCE-634F44EB5CBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB3B5B22-EFC0-4AD3-A124-AAA328EA0B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB3B5B22-EFC0-4AD3-A124-AAA328EA0B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB3B5B22-EFC0-4AD3-A124-AAA328EA0B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB3B5B22-EFC0-4AD3-A124-AAA328EA0B0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{786EB6EE-DD31-4A4E-9CCE-634F44EB5CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{786EB6EE-DD31-4A4E-9CCE-634F44EB5CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{786EB6EE-DD31-4A4E-9CCE-634F44EB5CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{786EB6EE-DD31-4A4E-9CCE-634F44EB5CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7A78093-F689-4074-9B63-9A22C76C0917}
+	EndGlobalSection
+EndGlobal
