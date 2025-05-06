@@ -1,0 +1,29 @@
+﻿@page "/quotes/update/{Id}"
+@rendermode InteractiveServer
+
+<PageTitle>Update Quote</PageTitle>
+
+<EditForm Model="Quote" OnValidSubmit="OnValidSubmitAsync" Enhance>
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger"/>
+
+    <div class="mb-3">
+        <label for="author" class="form-label">Author</label>
+        <InputText id="author" class="form-control" @bind-Value="Quote.Author" />
+        <ValidationMessage For="() => Quote.Author" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label for="text" class="form-label">Text</label>
+        <InputText id="text" class="form-control" @bind-Value="Quote.Text" />
+        <ValidationMessage For="() => Quote.Text" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <InputDate id="date" class="form-control" @bind-Value="Quote.Date" />
+        <ValidationMessage For="() => Quote.Date" class="text-danger" />
+    </div>
+
+    <div typeof="submit" class="btn btn-primary">Save</div>
+</EditForm>

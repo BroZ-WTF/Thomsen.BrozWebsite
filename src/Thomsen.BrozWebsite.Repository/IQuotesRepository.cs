@@ -2,6 +2,7 @@
 public interface IQuotesRepository {
     Task<string> CheckAndUpdateScheme();
 
+    Task<Quote> GetQuoteAsync(int id);
     Task<IEnumerable<Quote>> GetAllQuotesAsync();
 
     Task InsertQuoteAsync(Quote quote);

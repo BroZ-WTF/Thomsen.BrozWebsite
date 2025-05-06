@@ -9,9 +9,7 @@ public class Program {
     public static async Task Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services
-            .AddRazorComponents()
-            .AddInteractiveServerComponents();
+        builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
         builder.Services.AddTransient<IQuotesRepository, SqliteQuotesRepository>();
 
@@ -37,9 +35,8 @@ public class Program {
         app.UseStaticFiles();
         app.UseAntiforgery();
 
-        app.MapRazorComponents<App>()
-            .AddInteractiveServerRenderMode();
+        app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-        app.Run();
+        await app.RunAsync();
     }
 }

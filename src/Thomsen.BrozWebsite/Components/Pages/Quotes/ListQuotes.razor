@@ -1,0 +1,30 @@
+﻿@page "/quotes"
+@rendermode InteractiveServer
+
+<PageTitle>Quotes</PageTitle>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Author</th>
+            <th>Quote</th>
+            <th>Date</th>
+            <th>Visibility</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var quote in Quotes) {
+            <tr>
+                <td>@quote.Author</td>
+                <td>@quote.Text</td>
+                <td>@quote.Date</td>
+                <td>@quote.Visibility</td>
+                <td>
+                    <a href="@($"quotes/update/{quote.Id}")" class="btn btn-primary m-1">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="quotes/create" class="btn btn-primary">Add Quote</a>

@@ -21,8 +21,6 @@ public class SqliteQuotesRepository : IQuotesRepository {
             ?? throw new InvalidOperationException("missing connection string 'Default' in configuration");
 
         _logger = logger;
-
-        var a = Environment.CurrentDirectory;
     }
 
     public async Task<string> CheckAndUpdateScheme() {
@@ -73,12 +71,22 @@ public class SqliteQuotesRepository : IQuotesRepository {
         return version;
     }
 
+    public async Task<Quote> GetQuoteAsync(int id) {
+        using var connection = new SqliteConnection(_connectionString);
+
+        var sql =
+            """            
+            SELECT Id, Author, Text, Date, Visibility FROM [Quote] WHERE Id = @id
+            """;
+
+        return await connection.QuerySingleAsync<Quote>(sql, new { id }).ConfigureAwait(false);
+    }
     public async Task<IEnumerable<Quote>> GetAllQuotesAsync() {
         using var connection = new SqliteConnection(_connectionString);
 
         var sql =
             """            
-            SELECT Id, Author, Text, Date, Visibility FROM [Quote]            
+            SELECT Id, Author, Text, Date, Visibility FROM [Quote]
             """;
 
         return await connection.QueryAsync<Quote>(sql).ConfigureAwait(false);
