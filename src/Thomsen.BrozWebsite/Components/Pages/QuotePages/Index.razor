@@ -3,6 +3,33 @@
 
 <PageTitle>Quotes</PageTitle>
 
+<div class="d-flex justify-content-between">
+    <div>
+        <a href="quotes/create" class="btn btn-primary">Add Quote</a>
+
+        <label class="btn btn-secondary">
+            Import Quotes From JSON
+            <InputFile class="d-none" OnChange="LoadJsonFilesAsync" />
+        </label>
+
+        @if (ImportErrors.Count > 0) {
+            <ul class="text-danger">
+                @foreach (var error in ImportErrors) {
+                    <li>@error</li>
+                }
+            </ul>
+        }
+    </div>
+
+    <div>
+        @foreach (var (name, score) in AuthorScores) {
+            <span class="me-2">
+                <strong>@name</strong>: @score
+            </span>
+        }
+    </div>
+</div>
+
 <QuickGrid Class="table" Items="Quotes">
     <PropertyColumn Property="quote => quote.Author" Title="Author" Sortable="true" />
     <PropertyColumn Property="quote => quote.Text" Title="Quote" />
@@ -13,5 +40,3 @@
         <a href="@($"quotes/delete?id={quote.Id}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
-
-<a href="quotes/create" class="btn btn-primary">Add Quote</a>

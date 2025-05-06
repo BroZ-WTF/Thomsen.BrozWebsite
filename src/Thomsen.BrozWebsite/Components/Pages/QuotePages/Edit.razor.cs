@@ -24,6 +24,8 @@ public partial class Edit {
     private async Task OnValidSubmitAsync(EditContext editContext) {
         Debug.Assert(Quote is not null);
 
+        Quote.Sanitize();
+
         await QuotesRepository.UpdateQuoteAsync(Quote);
 
         NavigationManager.NavigateTo("/quotes");

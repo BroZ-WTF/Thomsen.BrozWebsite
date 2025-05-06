@@ -17,4 +17,9 @@ public record Quote {
 
     [JsonPropertyName("visibility"), Required, Range(0, 3)]
     public int Visibility { get; set; }
+
+    public void Sanitize() {
+        Author = Author.Trim();
+        Text = Text.Trim();
+    }
 }

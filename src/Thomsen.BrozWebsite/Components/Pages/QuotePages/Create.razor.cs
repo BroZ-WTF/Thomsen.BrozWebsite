@@ -17,6 +17,8 @@ public partial class Create {
     };
 
     private async Task OnValidSubmitAsync(EditContext editContext) {
+        Quote.Sanitize();
+
         await QuotesRepository.InsertQuoteAsync(Quote);
 
         NavigationManager.NavigateTo("/quotes");
