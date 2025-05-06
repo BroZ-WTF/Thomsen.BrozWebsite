@@ -15,16 +15,7 @@ public class Program {
 
         var app = builder.Build();
 
-        // Init Repository/DB
-        try {
-            var version = await app.Services.GetRequiredService<IQuotesRepository>().CheckAndUpdateScheme();
-
-            app.Logger.LogInformation("Starting with repository version: {version}", version);
-        } catch (Exception ex) {
-            app.Logger.LogError(ex, "Failed setting up with repository");
-
-            Environment.Exit(1);
-        }
+        await app.Services.GetRequiredService<IQuotesRepository>().CheckAndUpdateScheme();
 
         if (!app.Environment.IsDevelopment()) {
             app.UseExceptionHandler("/Error");

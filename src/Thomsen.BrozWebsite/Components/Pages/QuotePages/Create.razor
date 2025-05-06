@@ -1,11 +1,11 @@
-﻿@page "/quotes/update/{Id}"
+﻿@page "/quotes/create"
 @rendermode InteractiveServer
 
-<PageTitle>Update Quote</PageTitle>
+<PageTitle>Create Quote</PageTitle>
 
-<EditForm Model="Quote" OnValidSubmit="OnValidSubmitAsync" Enhance>
+<EditForm Model="Quote" OnValidSubmit="OnValidSubmitAsync" FormName="create" Enhance>
     <DataAnnotationsValidator />
-    <ValidationSummary class="text-danger"/>
+    <ValidationSummary class="text-danger" />
 
     <div class="mb-3">
         <label for="author" class="form-label">Author</label>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="text" class="form-label">Text</label>
+        <label for="text" class="form-label">Quote</label>
         <InputText id="text" class="form-control" @bind-Value="Quote.Text" />
         <ValidationMessage For="() => Quote.Text" class="text-danger" />
     </div>
@@ -25,5 +25,5 @@
         <ValidationMessage For="() => Quote.Date" class="text-danger" />
     </div>
 
-    <div typeof="submit" class="btn btn-primary">Save</div>
+    <button type="submit" class="btn btn-primary">Create</button>
 </EditForm>

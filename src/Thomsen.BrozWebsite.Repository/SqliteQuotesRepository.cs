@@ -23,7 +23,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
         _logger = logger;
     }
 
-    public async Task<string> CheckAndUpdateScheme() {
+    public async Task CheckAndUpdateScheme() {
         using var connection = new SqliteConnection(_connectionString);
 
         var sqlCreateInfoTable =
@@ -43,6 +43,8 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         var version = await connection.ExecuteScalarAsync<string>(sqlGetDbVersion).ConfigureAwait(false);
 
+        _logger.LogDebug("Schema version is {version}", version);
+
         // Initial
         if (string.IsNullOrEmpty(version)) {
             var sqlCreateQuoteTable =
@@ -58,17 +60,17 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
             await connection.ExecuteAsync(sqlCreateQuoteTable).ConfigureAwait(false);
 
+            version = "1";
+
             var sqlSetDbVersion =
                 """
-                INSERT INTO [Info] (Name, Value) Values ('DbVersion', '1')
+                INSERT INTO [Info] (Name, Value) Values ('DbVersion', @version)
                 """;
 
-            await connection.ExecuteAsync(sqlSetDbVersion).ConfigureAwait(false);
+            await connection.ExecuteAsync(sqlSetDbVersion, new { version }).ConfigureAwait(false);
 
-            version = "1";
+            _logger.LogDebug("Schema version updated to {version}", version);
         }
-
-        return version;
     }
 
     public async Task<Quote> GetQuoteAsync(int id) {
@@ -128,5 +130,18 @@ public class SqliteQuotesRepository : IQuotesRepository {
         await connection.ExecuteAsync(sql, quote).ConfigureAwait(false);
 
         _logger.LogDebug("Quote update: {quote}", quote);
+    }
+
+    public async Task DeleteQuoteAsync(int id) {
+        using var connection = new SqliteConnection(_connectionString);
+
+        var sql =
+            """
+            DELETE FROM [Quote] WHERE Id = @id
+            """;
+
+        await connection.ExecuteAsync(sql, new { id }).ConfigureAwait(false);
+
+        _logger.LogDebug("Quote deleted: {id}", id);
     }
 }

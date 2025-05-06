@@ -13,7 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Thomsen.BrozWebsite.Repository\Thomsen.BrozWebsite.Repository.csproj" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.15" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Thomsen.BrozWebsite.Repository\Thomsen.BrozWebsite.Repository.csproj" />
     </ItemGroup>
 
 </Project>

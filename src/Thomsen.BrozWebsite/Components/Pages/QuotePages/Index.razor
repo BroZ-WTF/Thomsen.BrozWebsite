@@ -1,0 +1,17 @@
+﻿@page "/quotes"
+@rendermode InteractiveServer
+
+<PageTitle>Quotes</PageTitle>
+
+<QuickGrid Class="table" Items="Quotes">
+    <PropertyColumn Property="quote => quote.Author" Title="Author" Sortable="true" />
+    <PropertyColumn Property="quote => quote.Text" Title="Quote" />
+    <PropertyColumn Property="quote => quote.Date" Title="Date" Sortable="true" Format="dd.MM.yyyy" />
+
+    <TemplateColumn Context="quote">
+        <a href="@($"quotes/edit?id={quote.Id}")">Edit</a>
+        <a href="@($"quotes/delete?id={quote.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+<a href="quotes/create" class="btn btn-primary">Add Quote</a>
