@@ -1,24 +1,48 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Die BroZ</PageTitle>
 
 <div class="container-fluid">
-
-    <div class="card text-center" style="max-width: 300px">
-        <div class="card-header">
-            Die BroZ
+    <div class="row justify-content-center">
+        <!-- Card 1: General Img -->
+        <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
+            <div class="card text-center m-2 w-100 h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Die BroZ</h5>
+                </div>
+                <img class="card-img-bottom" src="assets/logo_hq.png" alt="Logo" style="max-height: 400px; object-fit: contain;">
+                <div class="card-body">
+                    <p class="card-text">... weil auch im salzigsten Acker vielleicht irgendwo ein Blümchen erblüht.</p>
+                </div>
+            </div>
         </div>
-        <img class="card-img-bottom" src="assets/logo_hq.png">
-        <div class="card-body">
-            <p class="card-text">... weil auch im salzigsten Acker vielleicht irgendwo ein Blümchen erblüht.</p>
+
+        <!-- Card 2: Teamspeak 3 -->
+        <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
+            <div class="card text-center m-2 w-100 h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Teamspeak</h5>
+                </div>
+                <img class="card-img-bottom" src="https://ts3index.com/banner/s410_262829.png" alt="Teamspeak Banner" style="max-height: 400px; object-fit: contain;">
+            </div>
+        </div>
+
+        <!-- Card 3: Quote Scores -->
+        <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
+            <div class="card text-center m-2 w-100 h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Quote Scores</h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var score in ScoreInfos) {
+                        <dl class="row m-0">
+                            <dt class="col mb-0 text-start">@score.User:</dt>
+                            <dd class="col mb-0 text-end">@score.QuotesCnt</dd>
+                        </dl>
+                    }
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="card text-center" style="max-width: 300px"> 
-        <div class="card-header">
-            Teamspeak
-        </div>
-        <img class="card-img-bottom" src="https://ts3index.com/banner/s410_262829.png">
-    </div>
-
 </div>

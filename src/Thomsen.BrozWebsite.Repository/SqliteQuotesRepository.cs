@@ -83,7 +83,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         return await connection.QuerySingleAsync<Quote>(sql, new { id }).ConfigureAwait(false);
     }
-    public async Task<IEnumerable<Quote>> GetAllQuotesAsync() {
+    public async Task<Quote[]> GetAllQuotesAsync() {
         using var connection = new SqliteConnection(_connectionString);
 
         var sql =
@@ -91,7 +91,9 @@ public class SqliteQuotesRepository : IQuotesRepository {
             SELECT Id, Author, Text, Date, Visibility FROM [Quote]
             """;
 
-        return await connection.QueryAsync<Quote>(sql).ConfigureAwait(false);
+        var quotes = await connection.QueryAsync<Quote>(sql).ConfigureAwait(false);
+
+        return quotes.ToArray();
     }
 
     public async Task InsertQuoteAsync(Quote quote) {
@@ -106,7 +108,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         _logger.LogDebug("Quote inserted: {quote}", quote);
     }
-    public async Task InsertQuotesAsync(IEnumerable<Quote> quotes) {
+    public async Task InsertQuotesAsync(Quote[] quotes) {
         using var connection = new SqliteConnection(_connectionString);
 
         var sql =
@@ -116,7 +118,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         await connection.ExecuteAsync(sql, quotes).ConfigureAwait(false);
 
-        _logger.LogDebug("Quotes inserted ({cnt})", quotes.Count());
+        _logger.LogDebug("Quotes inserted ({cnt})", quotes.Length);
     }
 
     public async Task UpdateQuoteAsync(Quote quote) {

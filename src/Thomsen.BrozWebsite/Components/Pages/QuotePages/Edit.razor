@@ -1,7 +1,11 @@
 ﻿@page "/quotes/edit"
 @rendermode InteractiveServer
 
-<PageTitle>Update Quote</PageTitle>
+<PageTitle>Edit Quote</PageTitle>
+
+<h3>Edit quote</h3>
+
+<hr />
 
 <EditForm Model="Quote" OnValidSubmit="OnValidSubmitAsync" FormName="edit" Enhance>
     <DataAnnotationsValidator />
@@ -27,5 +31,14 @@
         <ValidationMessage For="() => Quote.Date" class="text-danger" />
     </div>
 
+    <div class="mb-3">
+        <InputCheckbox id="hidden" class="form-check-input" @bind-Value="Quote.Hidden" />
+        <label for="hidden" class="form-check-label">Hide Quote for not logged in viewers</label>
+        <ValidationMessage For="() => Quote.Hidden" class="text-danger" />
+    </div>
+
+    <hr />
+
     <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-secondary" href="/quotes">Back</a>
 </EditForm>

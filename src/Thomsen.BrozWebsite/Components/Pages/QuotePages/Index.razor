@@ -1,6 +1,8 @@
 ﻿@page "/quotes"
 @rendermode InteractiveServer
 
+@using Thomsen.BrozWebsite.Repository
+
 <PageTitle>Quotes</PageTitle>
 
 <div class="d-flex justify-content-between">
@@ -9,34 +11,53 @@
 
         <label class="btn btn-secondary">
             Import Quotes From JSON
-            <InputFile class="d-none" OnChange="LoadJsonFilesAsync" />
+            <InputFile class="d-none" OnChange="ImportJsonFileAsync" />
         </label>
 
-        @if (ImportErrors.Count > 0) {
-            <ul class="text-danger">
-                @foreach (var error in ImportErrors) {
-                    <li>@error</li>
+        @if (ImportJsonErrors.Count > 0) {
+            <div class="text-danger">
+                @foreach (var error in ImportJsonErrors) {
+                    <p>@error</p>
                 }
-            </ul>
+            </div>
         }
     </div>
 
-    <div>
-        @foreach (var (name, score) in AuthorScores) {
-            <span class="me-2">
-                <strong>@name</strong>: @score
-            </span>
-        }
+    <div class="page-size-chooser">
+        Items per page:
+        <select @bind=PaginationState.ItemsPerPage>
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+        </select>
     </div>
 </div>
 
-<QuickGrid Class="table" Items="Quotes">
-    <PropertyColumn Property="quote => quote.Author" Title="Author" Sortable="true" />
-    <PropertyColumn Property="quote => quote.Text" Title="Quote" />
-    <PropertyColumn Property="quote => quote.Date" Title="Date" Sortable="true" Format="dd.MM.yyyy" />
+<div class="grid">
+    <QuickGrid TGridItem="Quote" Class="table" ItemsProvider="LoadQuotesAsync" Pagination="PaginationState">
+        <PropertyColumn Property="quote => quote.Author" Title="Author" Sortable="true">
+            <ColumnOptions>
+                <div>
+                    <input type="search" @bind="AuthorFilter" @bind:event="oninput" autofocus />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
 
-    <TemplateColumn Context="quote">
-        <a href="@($"quotes/edit?id={quote.Id}")">Edit</a>
-        <a href="@($"quotes/delete?id={quote.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+        <PropertyColumn Property="quote => quote.Text" Title="Quote">
+            <ColumnOptions>
+                <div>
+                    <input type="search" @bind="TextFilter" @bind:event="oninput" autofocus />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+
+        <PropertyColumn Property="quote => quote.Date" Title="Date" Sortable="true" InitialSortDirection="SortDirection.Descending" Format="dd.MM.yyyy" />
+
+        <TemplateColumn Context="quote">
+            <a href="@($"quotes/edit?id={quote.Id}")">Edit</a>
+            <a href="@($"quotes/delete?id={quote.Id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+
+<Paginator State="PaginationState" />

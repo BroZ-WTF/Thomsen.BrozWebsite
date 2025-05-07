@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 using System.Collections.Immutable;
 using System.Net.Mime;
@@ -13,31 +15,41 @@ public partial class Index {
     [Inject]
     public required NavigationManager NavigationManager { get; init; }
 
-    private List<string> ImportErrors { get; } = [];
-    private IQueryable<Quote>? Quotes { get; set; }
-    private List<(string name, int score)>? AuthorScores { get; set; }
+    private List<string> ImportJsonErrors { get; } = [];
 
-    protected override async Task OnInitializedAsync() {
+    private string AuthorFilter { get; set; } = "";
+    private string TextFilter { get; set; } = "";
+    private PaginationState PaginationState { get; } = new() { ItemsPerPage = 20 };
+
+    private async ValueTask<GridItemsProviderResult<Quote>> LoadQuotesAsync(GridItemsProviderRequest<Quote> request) {
         var quotes = await QuotesRepository.GetAllQuotesAsync();
 
-        AuthorScores = quotes
-            .GroupBy(quote => quote.Author)
-            .Select(grp => (name: grp.Key, score: grp.Count()))
-            .OrderByDescending(score => score.score)
+        var filteredQuotes = quotes
+            .Where(quote => string.IsNullOrEmpty(AuthorFilter) || quote.Author.Contains(AuthorFilter, StringComparison.InvariantCultureIgnoreCase))
+            .Where(quote => string.IsNullOrEmpty(TextFilter) || quote.Text.Contains(TextFilter, StringComparison.InvariantCultureIgnoreCase))
             .ToList();
 
-        Quotes = quotes.AsQueryable();
+        var orderedQuotes = request.SortByColumn is null
+            ? filteredQuotes.OrderByDescending(quote => quote.Date).AsQueryable()
+            : request.ApplySorting(filteredQuotes.AsQueryable());
+
+        var pagedQuotes = orderedQuotes
+            .Skip(request.StartIndex)
+            .Take(request.Count ?? filteredQuotes.Count)
+            .ToList();
+
+        return GridItemsProviderResult.From(pagedQuotes, filteredQuotes.Count);
     }
 
-    private async Task LoadJsonFilesAsync(InputFileChangeEventArgs e) {
-        ImportErrors.Clear();
+    private async Task ImportJsonFileAsync(InputFileChangeEventArgs e) {
+        ImportJsonErrors.Clear();
 
         if (e.File.ContentType != "application/json") {
-            ImportErrors.Add("File was not a JSON");
+            ImportJsonErrors.Add("File was not a JSON");
             return;
         }
         if (e.FileCount > 1) {
-            ImportErrors.Add("More than one file");
+            ImportJsonErrors.Add("More than one file");
             return;
         }
         if (e.FileCount < 0) {
@@ -50,6 +62,6 @@ public partial class Index {
 
         await QuotesRepository.InsertQuotesAsync(quotes);
 
-        NavigationManager.NavigateTo("/quotes");
+        NavigationManager.NavigateTo("/quotes", true);
     }
 }

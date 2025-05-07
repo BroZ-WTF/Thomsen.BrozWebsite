@@ -12,8 +12,7 @@ public partial class Create {
 
     [SupplyParameterFromForm]
     private Quote Quote { get; set; } = new Quote {
-        Date = DateTime.Now,
-        Visibility = 1
+        Date = DateTime.Now
     };
 
     private async Task OnValidSubmitAsync(EditContext editContext) {

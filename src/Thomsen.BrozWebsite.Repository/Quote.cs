@@ -18,6 +18,12 @@ public record Quote {
     [JsonPropertyName("visibility"), Required, Range(0, 3)]
     public int Visibility { get; set; }
 
+    [JsonIgnore, Required]
+    public bool Hidden {
+        get => Visibility > 0;
+        set => Visibility = value ? 1 : 0;
+    }
+
     public void Sanitize() {
         Author = Author.Trim();
         Text = Text.Trim();
