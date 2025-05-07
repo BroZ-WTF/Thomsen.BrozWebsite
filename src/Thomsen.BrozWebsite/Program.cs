@@ -1,4 +1,5 @@
 using System;
+using System.Net.Security;
 using System.Threading.Tasks;
 
 using Thomsen.BrozWebsite.Components;
@@ -8,7 +9,7 @@ namespace Thomsen.BrozWebsite;
 public class Program {
     public static async Task Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
-
+        
         builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
         builder.Services.AddTransient<IQuotesRepository, SqliteQuotesRepository>();

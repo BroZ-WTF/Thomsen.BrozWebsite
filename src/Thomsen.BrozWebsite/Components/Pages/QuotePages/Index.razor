@@ -34,7 +34,7 @@
 </div>
 
 <div class="grid">
-    <QuickGrid TGridItem="Quote" Class="table" ItemsProvider="LoadQuotesAsync" Pagination="PaginationState">
+    <QuickGrid style="color: white" TGridItem="Quote" Class="table" ItemsProvider="LoadQuotesAsync" Pagination="PaginationState">
         <PropertyColumn Property="quote => quote.Author" Title="Author" Sortable="true">
             <ColumnOptions>
                 <div>
@@ -54,8 +54,12 @@
         <PropertyColumn Property="quote => quote.Date" Title="Date" Sortable="true" InitialSortDirection="SortDirection.Descending" Format="dd.MM.yyyy" />
 
         <TemplateColumn Context="quote">
-            <a href="@($"quotes/edit?id={quote.Id}")">Edit</a>
-            <a href="@($"quotes/delete?id={quote.Id}")">Delete</a>
+            <a href="@($"quotes/edit?id={quote.Id}")">
+                <i class="bi bi-pencil-fill" />
+            </a>
+            <a href="@($"quotes/delete?id={quote.Id}")">
+                <i class="bi bi-trash-fill" />
+            </a>
         </TemplateColumn>
     </QuickGrid>
 </div>

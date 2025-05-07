@@ -1,8 +1,26 @@
-﻿::deep tr:nth-child(odd) {
-    background: rgb(128, 128, 128, 0.2);
+﻿.grid {
+    background: rgb(38, 4, 46, 0.9);
+}
+
+::deep .quickgrid {
+    color: white;
+}
+    ::deep .quickgrid .col-title {
+        gap: 0.4rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: white
+    }
+
+    ::deep .quickgrid .sort-indicator {
+        color: purple;
+    }
+
+::deep tr:nth-child(odd) {
+    background: rgb(128, 128, 128, 0.3);
 }
 ::deep tr:nth-child(even) {
-    background: rgb(128, 128, 128, 0.4);
+    background: rgb(180, 180, 180, 0.3);
 }
 
 .page-size-chooser {
