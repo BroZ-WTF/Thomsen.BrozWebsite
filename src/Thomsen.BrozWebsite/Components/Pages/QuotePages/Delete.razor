@@ -1,4 +1,5 @@
 ﻿@page "/quotes/delete"
+@attribute [Authorize(Roles = "Admin,Editor")]
 @rendermode InteractiveServer
 
 <PageTitle>Delete Quote</PageTitle>

@@ -1,7 +1,5 @@
 ﻿namespace Thomsen.BrozWebsite.Repository;
 public interface IQuotesRepository {
-    Task CheckAndUpdateScheme();
-
     Task<Quote> GetQuoteAsync(int id);
     Task<Quote[]> GetAllQuotesAsync();
 

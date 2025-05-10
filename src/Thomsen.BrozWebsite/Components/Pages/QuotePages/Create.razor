@@ -1,4 +1,5 @@
 ﻿@page "/quotes/create"
+@attribute [Authorize(Roles = "Admin,Editor")]
 @rendermode InteractiveServer
 
 <PageTitle>Create Quote</PageTitle>

@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 using System.Collections.Immutable;
 using System.Net.Mime;
+using System.Security.Claims;
 
 using Thomsen.BrozWebsite.Repository;
 
 namespace Thomsen.BrozWebsite.Components.Pages.QuotePages;
 public partial class Index {
-    private AuthenticationState _authState;
 
     [Inject]
     public required IQuotesRepository QuotesRepository { get; init; }
@@ -26,14 +26,13 @@ public partial class Index {
     private string TextFilter { get; set; } = "";
     private PaginationState PaginationState { get; } = new() { ItemsPerPage = 20 };
 
-    protected override async Task OnInitializedAsync() {
-        _authState = await AuthenticationState.GetAuthenticationStateAsync();
-    }
-
     private async ValueTask<GridItemsProviderResult<Quote>> LoadQuotesAsync(GridItemsProviderRequest<Quote> request) {
         var quotes = await QuotesRepository.GetAllQuotesAsync();
 
-        var showHidden = _authState?.User?.Identity?.IsAuthenticated ?? false;
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+        var identity = authState?.User?.Identity as ClaimsIdentity;
+
+        var showHidden = identity?.HasClaim(claim => claim.Type == ClaimTypes.Role && Enum.Parse<UserRoleEnum>(claim.Value) > UserRoleEnum.None) ?? false;
 
         var filteredQuotes = quotes
             .Where(quote => showHidden || !quote.Hidden)

@@ -18,7 +18,11 @@ public class Program {
 
         builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
+        builder.Services.AddTransient<DbUpdater>();
+
+        builder.Services.AddTransient<IUserRoleRepository, UserRoleRepository>();
         builder.Services.AddTransient<IQuotesRepository, SqliteQuotesRepository>();
+        builder.Services.AddTransient<IClaimsTransformation, RoleClaimsTransformer>();
 
         builder.Services.AddCascadingAuthenticationState();
 
@@ -37,7 +41,7 @@ public class Program {
 
         var app = builder.Build();
 
-        await app.Services.GetRequiredService<IQuotesRepository>().CheckAndUpdateScheme();
+        await app.Services.GetRequiredService<DbUpdater>().CheckAndUpdateScheme();
 
         if (!app.Environment.IsDevelopment()) {
             app.UseExceptionHandler("/Error");

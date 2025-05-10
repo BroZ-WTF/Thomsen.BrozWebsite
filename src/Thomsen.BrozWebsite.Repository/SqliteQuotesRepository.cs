@@ -23,56 +23,6 @@ public class SqliteQuotesRepository : IQuotesRepository {
         _logger = logger;
     }
 
-    public async Task CheckAndUpdateScheme() {
-        using var connection = new SqliteConnection(_connectionString);
-
-        var sqlCreateInfoTable =
-            """
-            CREATE TABLE IF NOT EXISTS [Info] (
-             [Name]     TEXT    PRIMARY KEY,
-             [Value]    TEXT    NOT NULL
-            );
-            """;
-
-        await connection.ExecuteAsync(sqlCreateInfoTable).ConfigureAwait(false);
-
-        var sqlGetDbVersion =
-            """
-            SELECT Value FROM Info WHERE Name = 'DbVersion'
-            """;
-
-        var version = await connection.ExecuteScalarAsync<string>(sqlGetDbVersion).ConfigureAwait(false);
-
-        _logger.LogDebug("Schema version is {version}", version);
-
-        // Initial
-        if (string.IsNullOrEmpty(version)) {
-            var sqlCreateQuoteTable =
-                """
-                CREATE TABLE IF NOT EXISTS [Quote] (
-                    [Id]            INTEGER    PRIMARY KEY,
-                    [Author]        TEXT       NOT NULL,
-                    [Text]          TEXT       NOT NULL,
-                    [Date]          TEXT       NOT NULL,
-                    [Visibility]    INT        NOT NULL
-                );
-                """;
-
-            await connection.ExecuteAsync(sqlCreateQuoteTable).ConfigureAwait(false);
-
-            version = "1";
-
-            var sqlSetDbVersion =
-                """
-                INSERT INTO [Info] (Name, Value) Values ('DbVersion', @version)
-                """;
-
-            await connection.ExecuteAsync(sqlSetDbVersion, new { version }).ConfigureAwait(false);
-
-            _logger.LogDebug("Schema version updated to {version}", version);
-        }
-    }
-
     public async Task<Quote> GetQuoteAsync(int id) {
         using var connection = new SqliteConnection(_connectionString);
 
