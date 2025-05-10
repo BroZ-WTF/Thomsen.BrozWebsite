@@ -13,6 +13,27 @@
             </div>
 
             <img src="assets/topbar_logo.png" alt="Logo" class="topbar-logo position-absolute top-50 start-50 translate-middle" />
+
+            <div class="position-absolute top-0 end-0 p-3">
+                <AuthorizeView>
+                    <Authorized>
+                        <div class="btn btn-secondary  btn-sm">
+                            <i class="bi bi-person-fill" aria-hidden="true"></i>
+                            @context.User.Identity?.Name
+                        </div>
+                        <a class="btn btn-primary btn-sm" href="logout">
+                            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                            Logout
+                        </a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a class="btn btn-primary btn-sm" href="login">
+                            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                            Login with Google
+                        </a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
         </div>
 
         <article class="content px-4">

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.QuickGrid;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
@@ -10,10 +11,14 @@ using Thomsen.BrozWebsite.Repository;
 
 namespace Thomsen.BrozWebsite.Components.Pages.QuotePages;
 public partial class Index {
+    private AuthenticationState _authState;
+
     [Inject]
     public required IQuotesRepository QuotesRepository { get; init; }
     [Inject]
     public required NavigationManager NavigationManager { get; init; }
+    [Inject]
+    public required AuthenticationStateProvider AuthenticationState { get; init; }
 
     private List<string> ImportJsonErrors { get; } = [];
 
@@ -21,10 +26,17 @@ public partial class Index {
     private string TextFilter { get; set; } = "";
     private PaginationState PaginationState { get; } = new() { ItemsPerPage = 20 };
 
+    protected override async Task OnInitializedAsync() {
+        _authState = await AuthenticationState.GetAuthenticationStateAsync();
+    }
+
     private async ValueTask<GridItemsProviderResult<Quote>> LoadQuotesAsync(GridItemsProviderRequest<Quote> request) {
         var quotes = await QuotesRepository.GetAllQuotesAsync();
 
+        var showHidden = _authState?.User?.Identity?.IsAuthenticated ?? false;
+
         var filteredQuotes = quotes
+            .Where(quote => showHidden || !quote.Hidden)
             .Where(quote => string.IsNullOrEmpty(AuthorFilter) || quote.Author.Contains(AuthorFilter, StringComparison.InvariantCultureIgnoreCase))
             .Where(quote => string.IsNullOrEmpty(TextFilter) || quote.Text.Contains(TextFilter, StringComparison.InvariantCultureIgnoreCase))
             .ToList();

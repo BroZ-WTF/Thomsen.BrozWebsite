@@ -1,6 +1,7 @@
 ﻿@page "/quotes"
 @rendermode InteractiveServer
 
+@using Microsoft.AspNetCore.Authorization
 @using Thomsen.BrozWebsite.Repository
 
 <PageTitle>Quotes</PageTitle>
@@ -52,6 +53,8 @@
         </PropertyColumn>
 
         <PropertyColumn Property="quote => quote.Date" Title="Date" Sortable="true" InitialSortDirection="SortDirection.Descending" Format="dd.MM.yyyy" />
+
+        <PropertyColumn Property="quote => quote.Hidden" Title="Hidden" />
 
         <TemplateColumn Context="quote">
             <a href="@($"quotes/edit?id={quote.Id}")">

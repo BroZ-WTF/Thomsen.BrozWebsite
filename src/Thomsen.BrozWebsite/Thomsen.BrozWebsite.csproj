@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <BaseOutputPath>..\..\bin\Thomsen.BrozWebsite\</BaseOutputPath>
         <Copyright>Copyright © Thomas Wagner 2025</Copyright>
+        <UserSecretsId>6d8875d4-224e-4bed-9341-a841ab92b193</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.15" />
         <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.15" />
     </ItemGroup>
 
