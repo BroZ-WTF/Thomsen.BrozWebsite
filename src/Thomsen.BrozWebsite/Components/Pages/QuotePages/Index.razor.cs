@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 using System.Collections.Immutable;
 using System.Net.Mime;
+using System.Net.NetworkInformation;
 using System.Security.Claims;
 
 using Thomsen.BrozWebsite.Repository;
@@ -29,10 +30,7 @@ public partial class Index {
     private async ValueTask<GridItemsProviderResult<Quote>> LoadQuotesAsync(GridItemsProviderRequest<Quote> request) {
         var quotes = await QuotesRepository.GetAllQuotesAsync();
 
-        var authState = await AuthenticationState.GetAuthenticationStateAsync();
-        var identity = authState?.User?.Identity as ClaimsIdentity;
-
-        var showHidden = identity?.HasClaim(claim => claim.Type == ClaimTypes.Role && Enum.Parse<UserRoleEnum>(claim.Value) > UserRoleEnum.None) ?? false;
+        var showHidden = await IsAtLeast(UserRoleEnum.Editor);
 
         var filteredQuotes = quotes
             .Where(quote => showHidden || !quote.Hidden)
@@ -53,6 +51,11 @@ public partial class Index {
     }
 
     private async Task ImportJsonFileAsync(InputFileChangeEventArgs e) {
+        if (!await IsAtLeast(UserRoleEnum.Editor)) {
+            ImportJsonErrors.Add("No rights to do that");
+            return;
+        }
+
         ImportJsonErrors.Clear();
 
         if (e.File.ContentType != "application/json") {
@@ -74,5 +77,13 @@ public partial class Index {
         await QuotesRepository.InsertQuotesAsync(quotes);
 
         NavigationManager.NavigateTo("/quotes", true);
+    }
+
+    private async Task<bool> IsAtLeast(UserRoleEnum minRole) {
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+
+        var identity = authState?.User?.Identity as ClaimsIdentity;
+
+        return identity?.HasClaim(claim => claim.Type == ClaimTypes.Role && Enum.Parse<UserRoleEnum>(claim.Value) >= minRole) ?? false;
     }
 }

@@ -35,7 +35,7 @@
                     <h5 class="mb-0">Quote Scores</h5>
                 </div>
                 <div class="card-body">
-                    @foreach (var score in ScoreInfos) {
+                    @foreach (var score in ScoreInfos ?? []) {
                         <dl class="row m-0">
                             <dt class="col mb-0 text-start">@score.User:</dt>
                             <dd class="col mb-0 text-end">@score.QuotesCnt</dd>
