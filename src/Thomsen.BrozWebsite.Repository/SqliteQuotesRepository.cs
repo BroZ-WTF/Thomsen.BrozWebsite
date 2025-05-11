@@ -28,7 +28,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         var sql =
             """            
-            SELECT Id, Author, Text, Date, Visibility FROM [Quote] WHERE Id = @id
+            SELECT Id, Author, Text, Date, Visibility, Submitter FROM [Quote] WHERE Id = @id
             """;
 
         return await connection.QuerySingleAsync<Quote>(sql, new { id }).ConfigureAwait(false);
@@ -38,7 +38,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         var sql =
             """            
-            SELECT Id, Author, Text, Date, Visibility FROM [Quote]
+            SELECT Id, Author, Text, Date, Visibility, Submitter FROM [Quote]
             """;
 
         var quotes = await connection.QueryAsync<Quote>(sql).ConfigureAwait(false);
@@ -51,7 +51,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         var sql =
             """
-            INSERT INTO [Quote] (Author, Text, Date, Visibility) VALUES (@Author, @Text, @Date, @Visibility)
+            INSERT INTO [Quote] (Author, Text, Date, Visibility, Submitter) VALUES (@Author, @Text, @Date, @Visibility, @Submitter)
             """;
 
         await connection.ExecuteAsync(sql, quote).ConfigureAwait(false);
@@ -63,7 +63,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         var sql =
             """
-            INSERT INTO [Quote] (Author, Text, Date, Visibility) VALUES (@Author, @Text, @Date, @Visibility)
+            INSERT INTO [Quote] (Author, Text, Date, Visibility, Submitter) VALUES (@Author, @Text, @Date, @Visibility, @Submitter)
             """;
 
         await connection.ExecuteAsync(sql, quotes).ConfigureAwait(false);
@@ -76,7 +76,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         var sql =
             """
-            UPDATE [Quote] SET Author = @Author, Text = @Text, Date = @Date, Visibility = @Visibility WHERE Id = @Id
+            UPDATE [Quote] SET Author = @Author, Text = @Text, Date = @Date, Visibility = @Visibility, Submitter = @Submitter WHERE Id = @Id
             """;
 
         await connection.ExecuteAsync(sql, quote).ConfigureAwait(false);

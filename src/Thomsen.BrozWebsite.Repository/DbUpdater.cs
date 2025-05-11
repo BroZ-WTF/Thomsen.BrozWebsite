@@ -44,7 +44,7 @@ public class DbUpdater {
 
         _logger.LogDebug("Schema version is {version}", version);
 
-        // Initial
+        // Initial: Quote table
         if (string.IsNullOrEmpty(version)) {
             var sqlCreateQuoteTable =
                 """
@@ -71,6 +71,7 @@ public class DbUpdater {
             _logger.LogDebug("Schema version updated to {version}", version);
         }
 
+        // User table
         if (version == "1") {
             var sqlCreateUserTable =
                 """
@@ -85,14 +86,32 @@ public class DbUpdater {
 
             version = "2";
 
-            var sqlSetDbVersion =
+            await UpdateDbVersionAsync(connection, version).ConfigureAwait(false);
+        }
+
+        // Quote table with submitter
+        if (version == "2") {
+            var sqlUpdateQuoteTable =
                 """
-                UPDATE [Info] SET Value = @version WHERE Name = 'DbVersion'
+                ALTER TABLE [Quote] ADD [Submitter] TEXT NULL;
                 """;
 
-            await connection.ExecuteAsync(sqlSetDbVersion, new { version }).ConfigureAwait(false);
+            await connection.ExecuteAsync(sqlUpdateQuoteTable).ConfigureAwait(false);
 
-            _logger.LogDebug("Schema version updated to {version}", version);
+            version = "3";
+
+            await UpdateDbVersionAsync(connection, version).ConfigureAwait(false);
         }
+    }
+
+    private async Task UpdateDbVersionAsync(SqliteConnection connection, string version) {
+        var sqlSetDbVersion =
+            """
+            UPDATE [Info] SET Value = @version WHERE Name = 'DbVersion'
+            """;
+
+        await connection.ExecuteAsync(sqlSetDbVersion, new { version }).ConfigureAwait(false);
+
+        _logger.LogDebug("Schema version updated to {version}", version);
     }
 }

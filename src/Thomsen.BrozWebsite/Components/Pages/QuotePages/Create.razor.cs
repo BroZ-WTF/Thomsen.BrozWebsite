@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
 using Thomsen.BrozWebsite.Repository;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace Thomsen.BrozWebsite.Components.Pages.QuotePages;
 public partial class Create {
@@ -9,6 +11,9 @@ public partial class Create {
     public required IQuotesRepository QuotesRepository { get; init; }
     [Inject]
     public required NavigationManager NavigationManager { get; init; }
+    [Inject]
+    public required AuthenticationStateProvider AuthenticationState { get; init; }
+
 
     [SupplyParameterFromForm]
     private Quote Quote { get; set; } = new Quote {
@@ -16,6 +21,14 @@ public partial class Create {
     };
 
     private async Task OnValidSubmitAsync(EditContext editContext) {
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+
+        var email = (authState?.User?.Identity as ClaimsIdentity)?.FindFirst(ClaimTypes.Email)?.Value;
+
+        if (!string.IsNullOrEmpty(email)) {
+            Quote.Submitter = email;
+        }
+
         Quote.Sanitize();
 
         await QuotesRepository.InsertQuoteAsync(Quote);
