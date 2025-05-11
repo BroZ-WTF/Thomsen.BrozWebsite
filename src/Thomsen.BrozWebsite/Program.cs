@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Security;
 using System.Threading.Tasks;
 
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 
 using Thomsen.BrozWebsite.Components;
@@ -41,6 +43,20 @@ public class Program {
 
         var app = builder.Build();
 
+        app.UseForwardedHeaders(new ForwardedHeadersOptions {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+            RequireHeaderSymmetry = false,
+            ForwardLimit = null,
+            KnownNetworks = { new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("0.0.0.0"), 0) },
+            KnownProxies = { IPAddress.Parse("127.0.0.1") }
+        });
+
+        app.Use((context, next) => {
+            context.Request.Scheme = "https";
+
+            return next();
+        });
+
         await app.Services.GetRequiredService<DbUpdater>().CheckAndUpdateScheme();
 
         if (!app.Environment.IsDevelopment()) {
@@ -50,6 +66,7 @@ public class Program {
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        app.UseRouting();
         app.UseAntiforgery();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -64,6 +81,7 @@ public class Program {
 
         app.MapGet("/logout", async context => {
             await context.SignOutAsync("Cookies");
+
             context.Response.Redirect("/");
         });
 

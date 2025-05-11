@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 
+using System.Net.NetworkInformation;
 using System.Security.Claims;
 
 using Thomsen.BrozWebsite.Repository;
@@ -8,6 +9,8 @@ using static Dapper.SqlMapper;
 
 namespace Thomsen.BrozWebsite;
 public class RoleClaimsTransformer : IClaimsTransformation {
+    private static readonly SemaphoreSlim _semaphore = new(1);
+
     private readonly IUserRoleRepository _userRoleRepository;
 
     public RoleClaimsTransformer(IUserRoleRepository userRoleRepository) {
@@ -25,23 +28,28 @@ public class RoleClaimsTransformer : IClaimsTransformation {
             return principal;
         }
 
-        var user = await _userRoleRepository.GetUserAsync(email);
+        await _semaphore.WaitAsync();
+        try {
+            var user = await _userRoleRepository.GetUserAsync(email);
 
-        if (user is null) {
-            user = new UserRole {
-                Email = email,
-                Role = UserRoleEnum.None
-            };
+            if (user is null) {
+                user = new UserRole {
+                    Email = email,
+                    Role = UserRoleEnum.None
+                };
 
-            await _userRoleRepository.InsertUserAsync(user);
+                await _userRoleRepository.InsertUserAsync(user);
+
+                return principal;
+            }
+
+            var identity = (ClaimsIdentity)principal.Identity;
+
+            identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             return principal;
+        } finally {
+            _semaphore.Release();
         }
-
-        var identity = (ClaimsIdentity)principal.Identity;
-
-        identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
-
-        return principal;
     }
 }

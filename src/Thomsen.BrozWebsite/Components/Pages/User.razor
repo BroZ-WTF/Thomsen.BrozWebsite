@@ -1,0 +1,25 @@
+﻿@page "/user"
+@rendermode InteractiveServer
+
+<PageTitle>Delete Quote</PageTitle>
+
+<h3>@ClaimsIdentity?.Name</h3>
+
+<hr />
+
+<div>
+    @foreach (var claim in ClaimsIdentity?.Claims ?? []) {
+        <dl class="row">
+            <dt class="col-sm">@claim.Type</dt>
+            <dd class="col-sm">@claim.Value</dd>
+        </dl>
+    }
+</div>
+
+<hr />
+
+<div class="d-flex justify-content-between">
+    <button class="btn btn-primary" @onclick=DeleteUserAsync>Delete</button>
+
+    <a class="" href="privacy">Privacy Info</a>
+</div>

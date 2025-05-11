@@ -54,13 +54,11 @@
 
         <PropertyColumn Property="quote => quote.Date" Title="Date" Sortable="true" InitialSortDirection="SortDirection.Descending" Format="dd.MM.yyyy" />
 
-        <PropertyColumn Property="quote => quote.Hidden" Title="Hidden" />
-
         <TemplateColumn Context="quote">
-            <a href="@($"quotes/edit?id={quote.Id}")">
+            <a class="btn btn-outline-primary btn-sm" href="@($"quotes/edit?id={quote.Id}")">
                 <i class="bi bi-pencil-fill" />
             </a>
-            <a href="@($"quotes/delete?id={quote.Id}")">
+            <a class="btn btn-outline-secondary btn-sm" href="@($"quotes/delete?id={quote.Id}")">
                 <i class="bi bi-trash-fill" />
             </a>
         </TemplateColumn>

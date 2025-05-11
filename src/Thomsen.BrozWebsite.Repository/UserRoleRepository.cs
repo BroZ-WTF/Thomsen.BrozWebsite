@@ -45,4 +45,17 @@ public class UserRoleRepository : IUserRoleRepository {
 
         _logger.LogDebug("User inserted: {user}", user);
     }
+
+    public async Task DeleteUserAsync(string email) {
+        using var connection = new SqliteConnection(_connectionString);
+
+        var sql =
+            """            
+            DELETE FROM [User] WHERE Email = @email
+            """;
+
+        var cnt = await connection.ExecuteAsync(sql, new { email }).ConfigureAwait(false);
+
+        _logger.LogDebug("User deleted: {email}", email);
+    }
 }

@@ -17,10 +17,10 @@
             <div class="position-absolute top-0 end-0 p-3">
                 <AuthorizeView>
                     <Authorized>
-                        <div class="btn btn-secondary  btn-sm">
+                        <a class="btn btn-secondary  btn-sm" href="user">
                             <i class="bi bi-person-fill" aria-hidden="true"></i>
                             @context.User.Identity?.Name
-                        </div>
+                        </a>
                         <a class="btn btn-primary btn-sm" href="logout">
                             <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
                             Logout

@@ -13,7 +13,6 @@ using Thomsen.BrozWebsite.Repository;
 
 namespace Thomsen.BrozWebsite.Components.Pages.QuotePages;
 public partial class Index {
-
     [Inject]
     public required IQuotesRepository QuotesRepository { get; init; }
     [Inject]
