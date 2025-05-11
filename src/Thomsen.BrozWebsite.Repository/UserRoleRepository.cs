@@ -32,6 +32,18 @@ public class UserRoleRepository : IUserRoleRepository {
 
         return await connection.QuerySingleOrDefaultAsync<UserRole>(sql, new { email }).ConfigureAwait(false);
     }
+    public async Task<UserRole[]> GetAllUsersAsync() {
+        using var connection = new SqliteConnection(_connectionString);
+
+        var sql =
+            """            
+            SELECT Id, Email, Role FROM [User]
+            """;
+
+        var users = await connection.QueryAsync<UserRole>(sql).ConfigureAwait(false);
+
+        return users.ToArray();
+    }
 
     public async Task InsertUserAsync(UserRole user) {
         using var connection = new SqliteConnection(_connectionString);
@@ -44,6 +56,19 @@ public class UserRoleRepository : IUserRoleRepository {
         await connection.ExecuteAsync(sql, user).ConfigureAwait(false);
 
         _logger.LogDebug("User inserted: {user}", user);
+    }
+
+    public async Task UpdateUserAsync(UserRole user) {
+        using var connection = new SqliteConnection(_connectionString);
+
+        var sql =
+            """
+            UPDATE [User] SET Email = @Email, Role = @Role WHERE Id = @Id
+            """;
+
+        await connection.ExecuteAsync(sql, user).ConfigureAwait(false);
+
+        _logger.LogDebug("User update: {user}", user);
     }
 
     public async Task DeleteUserAsync(string email) {

@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Thomsen.BrozWebsite.Repository;
 
 namespace Thomsen.BrozWebsite.Components.Pages;
-public partial class User {
+public partial class UserInfo {
     [Inject]
     public required AuthenticationStateProvider AuthenticationState { get; init; }
     [Inject]

@@ -1,0 +1,35 @@
+﻿@page "/users"
+@attribute [Authorize(Roles = "Admin")]
+@rendermode InteractiveServer
+
+@using Thomsen.BrozWebsite.Repository
+
+<PageTitle>Edit Users</PageTitle>
+
+<h3>Edit users</h3>
+
+<hr />
+
+<div class="grid">
+    <QuickGrid style="color: white" TGridItem="UserRole" Class="table" Items="Users">
+        <PropertyColumn Property="user => user.Id" Title="ID" Sortable="true" />
+
+        <PropertyColumn Property="user => user.Email" Title="EMail" Sortable="true" />
+
+        <TemplateColumn Context="user" Title="Role">
+            <div class="selector">
+                <select value="@user.Role.ToString()" @onchange="(e) => SetUserRoleAync(user.Email, Enum.Parse<UserRoleEnum>(e.Value?.ToString()))">
+                    <option value="@UserRoleEnum.None.ToString()">None</option>
+                    <option value="@UserRoleEnum.Editor.ToString()">Editor</option>
+                    <option value="@UserRoleEnum.Admin.ToString()">Admin</option>
+                </select>
+            </div>
+        </TemplateColumn>
+
+        <TemplateColumn Context="user">
+            <button class="btn btn-outline-secondary btn-sm" @onclick="() => DeleteUserAsync(user.Email)">
+                <i class="bi bi-trash-fill" />
+            </button>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
