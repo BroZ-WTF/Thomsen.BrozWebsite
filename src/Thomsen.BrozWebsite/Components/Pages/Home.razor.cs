@@ -7,29 +7,47 @@ public partial class Home {
     [Inject]
     public required IQuotesRepository QuotesRepository { get; init; }
 
-    private ScoreInfo[]? ScoreInfos { get; set; }
+    private ScoreInfo[]? GeneralScores { get; set; }
+    private ScoreInfo[]? KonversationScores { get; set; }
+    private ScoreInfo[]? SubmitterScores { get; set; }
 
     protected override async Task OnInitializedAsync() {
         var quotes = await QuotesRepository.GetAllQuotesAsync();
 
-        var scores = new Dictionary<string, int>();
+        var generalScores = new Dictionary<string, int>();
         foreach (var quote in quotes) {
-            if (scores.TryGetValue(quote.Author, out int value)) {
-                scores[quote.Author] = value + 1;
+            if (generalScores.TryGetValue(quote.Author, out int cnt)) {
+                generalScores[quote.Author] = cnt + 1;
             } else {
-                scores.Add(quote.Author, 1);
-            }
-
-            if (quote.Author == "Konversation") {
-
+                generalScores.Add(quote.Author, 1);
             }
         }
 
-        ScoreInfos = scores
+        GeneralScores = generalScores
             .OrderByDescending(score => score.Value)
-            .Select(score => new ScoreInfo(score.Key, score.Value, 0))
+            .Select(score => new ScoreInfo(score.Key, score.Value))
+            .ToArray();
+
+        var konversationScores = new Dictionary<string, int>();
+        foreach (var quote in quotes) {
+            if (quote.Author == "Konversation") {
+                foreach (var author in generalScores.Keys) {
+                    if (quote.Text.Contains(author)) {
+                        if (konversationScores.TryGetValue(author, out int cnt)) {
+                            konversationScores[author] = cnt + 1;
+                        } else {
+                            konversationScores.Add(author, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        KonversationScores = konversationScores
+            .OrderByDescending(score => score.Value)
+            .Select(score => new ScoreInfo(score.Key, score.Value))
             .ToArray();
     }
 
-    private record ScoreInfo(string User, int QuotesCnt, int CoversationCnt);
+    private record ScoreInfo(string User, int Score);
 }
