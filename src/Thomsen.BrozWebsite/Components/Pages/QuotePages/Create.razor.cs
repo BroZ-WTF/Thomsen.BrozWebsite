@@ -24,7 +24,7 @@ public partial class Create {
     private async Task OnValidSubmitAsync(EditContext editContext) {
         var authState = await AuthenticationState.GetAuthenticationStateAsync();
 
-        var email = (authState?.User?.Identity as ClaimsIdentity)?.FindFirst(ClaimTypes.Email)?.Value;
+        var email = authState?.User?.FindFirst(ClaimTypes.Email)?.Value;
 
         if (!string.IsNullOrEmpty(email)) {
             Quote.Submitter = email;

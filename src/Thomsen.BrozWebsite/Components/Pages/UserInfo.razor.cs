@@ -14,16 +14,16 @@ public partial class UserInfo {
     [Inject]
     public required NavigationManager NavigationManager { get; init; }
 
-    private ClaimsIdentity? ClaimsIdentity { get; set; }
+    private ClaimsPrincipal? User { get; set; }
 
     protected override async Task OnInitializedAsync() {
         var authState = await AuthenticationState.GetAuthenticationStateAsync();
 
-        ClaimsIdentity = authState?.User?.Identity as ClaimsIdentity;
+        User = authState?.User;
     }
 
     private async Task DeleteUserAsync() {
-        var email = ClaimsIdentity?.FindFirst(ClaimTypes.Email)?.Value;
+        var email = User?.FindFirst(ClaimTypes.Email)?.Value;
 
         if (email is not null) {
             await UserRoleRepository.DeleteUserAsync(email);

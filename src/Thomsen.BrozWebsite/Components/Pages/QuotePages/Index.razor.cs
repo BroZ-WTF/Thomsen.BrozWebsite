@@ -77,8 +77,6 @@ public partial class Index {
     private async Task<bool> IsAtLeast(UserRoleEnum minRole) {
         var authState = await AuthenticationState.GetAuthenticationStateAsync();
 
-        var identity = authState?.User?.Identity as ClaimsIdentity;
-
-        return identity?.HasClaim(claim => claim.Type == ClaimTypes.Role && Enum.Parse<UserRoleEnum>(claim.Value) >= minRole) ?? false;
+        return authState?.User?.HasClaim(claim => claim.Type == ClaimTypes.Role && Enum.Parse<UserRoleEnum>(claim.Value) >= minRole) ?? false;
     }
 }

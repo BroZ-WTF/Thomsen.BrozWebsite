@@ -3,12 +3,12 @@
 
 <PageTitle>User Info</PageTitle>
 
-<h3>@ClaimsIdentity?.Name</h3>
+<h3>@User?.Identity?.Name</h3>
 
 <hr />
 
 <div>
-    @foreach (var claim in ClaimsIdentity?.Claims ?? []) {
+    @foreach (var claim in User?.Claims ?? []) {
         <dl class="row">
             <dt class="col-sm">@claim.Type</dt>
             <dd class="col-sm">@claim.Value</dd>
