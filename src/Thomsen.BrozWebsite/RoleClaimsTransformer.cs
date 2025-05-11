@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 
-using System.Net.NetworkInformation;
 using System.Security.Claims;
 
 using Thomsen.BrozWebsite.Repository;
-
-using static Dapper.SqlMapper;
 
 namespace Thomsen.BrozWebsite;
 public class RoleClaimsTransformer : IClaimsTransformation {

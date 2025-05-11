@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc.Formatters;
 
 using Thomsen.BrozWebsite.Repository;
 
@@ -21,7 +20,7 @@ public partial class Home {
                 scores.Add(quote.Author, 1);
             }
 
-            if(quote.Author == "Konversation") {
+            if (quote.Author == "Konversation") {
 
             }
         }

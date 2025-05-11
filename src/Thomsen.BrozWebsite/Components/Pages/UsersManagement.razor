@@ -18,7 +18,7 @@
 
         <TemplateColumn Context="user" Title="Role">
             <div class="selector">
-                <select value="@user.Role.ToString()" @onchange="(e) => SetUserRoleAync(user.Email, Enum.Parse<UserRoleEnum>(e.Value?.ToString()))">
+                <select value="@user.Role.ToString()" @onchange="(e) => SetUserRoleAync(user.Email, Enum.Parse<UserRoleEnum>(e.Value!.ToString()!))">
                     <option value="@UserRoleEnum.None.ToString()">None</option>
                     <option value="@UserRoleEnum.Editor.ToString()">Editor</option>
                     <option value="@UserRoleEnum.Admin.ToString()">Admin</option>

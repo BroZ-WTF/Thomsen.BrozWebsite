@@ -4,12 +4,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Thomsen.BrozWebsite.Repository;
 public class DbUpdater {
     private readonly string _connectionString;

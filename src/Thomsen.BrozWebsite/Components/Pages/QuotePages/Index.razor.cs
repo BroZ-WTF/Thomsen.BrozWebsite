@@ -2,11 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.QuickGrid;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
 
-using System.Collections.Immutable;
-using System.Net.Mime;
-using System.Net.NetworkInformation;
 using System.Security.Claims;
 
 using Thomsen.BrozWebsite.Repository;

@@ -4,13 +4,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Thomsen.BrozWebsite.Repository;
 public class SqliteQuotesRepository : IQuotesRepository {
     private readonly string _connectionString;
@@ -81,7 +74,7 @@ public class SqliteQuotesRepository : IQuotesRepository {
 
         await connection.ExecuteAsync(sql, quote).ConfigureAwait(false);
 
-        _logger.LogDebug("Quote update: {quote}", quote);
+        _logger.LogDebug("Quote updated: {quote}", quote);
     }
 
     public async Task DeleteQuoteAsync(int id) {

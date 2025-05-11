@@ -1,14 +1,7 @@
-using System;
-using System.Net;
-using System.Net.Security;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
+
+using System.Net;
 
 using Thomsen.BrozWebsite.Components;
 using Thomsen.BrozWebsite.Repository;

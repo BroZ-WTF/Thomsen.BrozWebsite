@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-using System.Diagnostics;
-
 using Thomsen.BrozWebsite.Repository;
 
 namespace Thomsen.BrozWebsite.Components.Pages.QuotePages;

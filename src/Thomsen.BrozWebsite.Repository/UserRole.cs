@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Thomsen.BrozWebsite.Repository;
+﻿namespace Thomsen.BrozWebsite.Repository;
 
 public enum UserRoleEnum {
     None = 0,

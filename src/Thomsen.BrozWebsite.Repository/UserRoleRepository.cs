@@ -4,12 +4,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Thomsen.BrozWebsite.Repository;
 public class UserRoleRepository : IUserRoleRepository {
     private readonly string _connectionString;
@@ -68,7 +62,7 @@ public class UserRoleRepository : IUserRoleRepository {
 
         await connection.ExecuteAsync(sql, user).ConfigureAwait(false);
 
-        _logger.LogDebug("User update: {user}", user);
+        _logger.LogDebug("User updated: {user}", user);
     }
 
     public async Task DeleteUserAsync(string email) {

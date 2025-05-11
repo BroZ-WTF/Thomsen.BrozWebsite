@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components;
-using System.Diagnostics;
-using Thomsen.BrozWebsite.Repository;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
+
 using System.Security.Claims;
+
+using Thomsen.BrozWebsite.Repository;
 
 namespace Thomsen.BrozWebsite.Components.Pages.QuotePages;
 public partial class Create {
