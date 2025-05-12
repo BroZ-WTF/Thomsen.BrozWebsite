@@ -19,8 +19,6 @@ public partial class Index {
     private ClaimsPrincipal? User { get; set; }
     private bool IsAdmin => User?.IsInRole(UserRoleEnum.Admin.ToString()) ?? false;
 
-    private int AllQuotesCnt { get; set; }
-
     private List<string> ImportJsonErrors { get; } = [];
 
     private string AuthorFilter { get; set; } = "";

@@ -66,9 +66,9 @@ public class Program {
         });
 
         app.MapGet("/logout", async context => {
-            await context.SignOutAsync("Cookies");
-
-            context.Response.Redirect("/");
+            await context.SignOutAsync("Cookies", new AuthenticationProperties {
+                RedirectUri = "/"
+            });
         });
 
         await app.RunAsync();
