@@ -28,6 +28,8 @@
 <hr />
 
 <EditForm Model="Quote" OnValidSubmit="OnValidSubmitAsync" FormName="delete" Enhance>
+    <AntiforgeryToken />
+
     <button type="submit" class="btn btn-primary">Delete</button>
     <a class="btn btn-secondary" href="/quotes">Back</a>
 </EditForm>

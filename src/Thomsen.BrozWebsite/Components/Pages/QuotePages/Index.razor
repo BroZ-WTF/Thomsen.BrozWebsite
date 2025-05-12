@@ -10,17 +10,19 @@
     <div>
         <a href="quotes/create" class="btn btn-primary">Add Quote</a>
 
-        <label class="btn btn-secondary">
-            Import Quotes From JSON
-            <InputFile class="d-none" OnChange="ImportJsonFileAsync" />
-        </label>
+        @if (IsAdmin) {
+            <label class="btn btn-secondary ms-2">
+                Import Quotes From JSON
+                <InputFile class="d-none" OnChange="ImportJsonFileAsync" />
+            </label>
 
-        @if (ImportJsonErrors.Count > 0) {
-            <div class="text-danger">
-                @foreach (var error in ImportJsonErrors) {
-                    <p>@error</p>
-                }
-            </div>
+            @if (ImportJsonErrors.Count > 0) {
+                <div class="text-danger">
+                    @foreach (var error in ImportJsonErrors) {
+                        <p>@error</p>
+                    }
+                </div>
+            }
         }
     </div>
 

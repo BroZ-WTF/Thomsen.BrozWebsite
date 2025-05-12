@@ -40,14 +40,7 @@ public class Program {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
             RequireHeaderSymmetry = false,
             ForwardLimit = null,
-            KnownNetworks = { new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("0.0.0.0"), 0) },
             KnownProxies = { IPAddress.Parse("127.0.0.1") }
-        });
-
-        app.Use((context, next) => {
-            context.Request.Scheme = "https";
-
-            return next();
         });
 
         await app.Services.GetRequiredService<DbUpdater>().CheckAndUpdateScheme();

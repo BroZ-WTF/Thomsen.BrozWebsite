@@ -16,16 +16,27 @@ public partial class Index {
     [Inject]
     public required AuthenticationStateProvider AuthenticationState { get; init; }
 
+    private ClaimsPrincipal? User { get; set; }
+    private bool IsAdmin => User?.IsInRole(UserRoleEnum.Admin.ToString()) ?? false;
+
+    private int AllQuotesCnt { get; set; }
+
     private List<string> ImportJsonErrors { get; } = [];
 
     private string AuthorFilter { get; set; } = "";
     private string TextFilter { get; set; } = "";
     private PaginationState PaginationState { get; } = new() { ItemsPerPage = 20 };
 
+    protected override async Task OnInitializedAsync() {
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+
+        User = authState?.User;
+    }
+
     private async ValueTask<GridItemsProviderResult<Quote>> LoadQuotesAsync(GridItemsProviderRequest<Quote> request) {
         var quotes = await QuotesRepository.GetAllQuotesAsync();
 
-        var showHidden = await IsAtLeast(UserRoleEnum.Editor);
+        var showHidden = IsAtLeast(User, UserRoleEnum.Editor);
 
         var filteredQuotes = quotes
             .Where(quote => showHidden || !quote.Hidden)
@@ -46,7 +57,7 @@ public partial class Index {
     }
 
     private async Task ImportJsonFileAsync(InputFileChangeEventArgs e) {
-        if (!await IsAtLeast(UserRoleEnum.Editor)) {
+        if (!IsAtLeast(User, UserRoleEnum.Editor)) {
             ImportJsonErrors.Add("No rights to do that");
             return;
         }
@@ -74,9 +85,9 @@ public partial class Index {
         NavigationManager.NavigateTo("/quotes", true);
     }
 
-    private async Task<bool> IsAtLeast(UserRoleEnum minRole) {
-        var authState = await AuthenticationState.GetAuthenticationStateAsync();
-
-        return authState?.User?.HasClaim(claim => claim.Type == ClaimTypes.Role && Enum.Parse<UserRoleEnum>(claim.Value) >= minRole) ?? false;
+    private static bool IsAtLeast(ClaimsPrincipal? user, UserRoleEnum minRole) {
+        return user?.HasClaim(claim =>
+            claim.Type == ClaimTypes.Role &&
+            Enum.Parse<UserRoleEnum>(claim.Value) >= minRole) ?? false;
     }
 }

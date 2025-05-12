@@ -9,6 +9,8 @@
 <hr />
 
 <EditForm Model="Quote" OnValidSubmit="OnValidSubmitAsync" FormName="create" Enhance>
+    <AntiforgeryToken />
+
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" />
 
