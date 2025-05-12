@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.HttpOverrides;
 
 using System.Net;
@@ -23,11 +26,11 @@ public class Program {
 
         builder.Services
             .AddAuthentication(options => {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "Google";
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             })
-            .AddCookie("Cookies")
-            .AddGoogle("Google", options => {
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddGoogle(GoogleDefaults.AuthenticationScheme, options => {
                 options.ClientId = builder.Configuration["Google:ClientId"]!;
                 options.ClientSecret = builder.Configuration["Google:ClientSecret"]!;
             });
@@ -60,13 +63,13 @@ public class Program {
         app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
         app.MapGet("/login", async context => {
-            await context.ChallengeAsync("Google", new AuthenticationProperties {
+            await context.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties {
                 RedirectUri = "/"
             });
         });
 
         app.MapGet("/logout", async context => {
-            await context.SignOutAsync("Cookies", new AuthenticationProperties {
+            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, new AuthenticationProperties {
                 RedirectUri = "/"
             });
         });

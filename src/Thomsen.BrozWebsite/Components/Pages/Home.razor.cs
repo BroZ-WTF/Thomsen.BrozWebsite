@@ -6,10 +6,11 @@ namespace Thomsen.BrozWebsite.Components.Pages;
 public partial class Home {
     [Inject]
     public required IQuotesRepository QuotesRepository { get; init; }
+    [Inject]
+    public required NavigationManager NavigationManager { get; init; }
 
     private ScoreInfo[]? GeneralScores { get; set; }
     private ScoreInfo[]? KonversationScores { get; set; }
-    private ScoreInfo[]? SubmitterScores { get; set; }
 
     protected override async Task OnInitializedAsync() {
         var quotes = await QuotesRepository.GetAllQuotesAsync();

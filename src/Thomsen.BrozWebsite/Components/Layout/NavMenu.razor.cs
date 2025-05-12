@@ -13,7 +13,7 @@ public partial class NavMenu {
 
     protected override async Task OnInitializedAsync() {
         var authState = await AuthenticationState.GetAuthenticationStateAsync();
-
+        
         User = authState?.User;
     }
 }
